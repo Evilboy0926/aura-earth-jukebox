@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="ai-disclosure" content="Generative AI (Google Gemini / Antigravity) was used during the hackathon window to brainstorm the spatial audio mapping architecture, scaffold HTML/CSS/JS code, and structure documentation." />
+  <title>AURA-EARTH | 7-Slide Presentation Deck (NASA Space Apps 2026)</title>
+  <style>
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+
+    :root {
+      --bg-deep: #070b14;
+      --card-bg: #0f172a;
+      --border: #1e293b;
+      --cyan: #38bdf8;
+      --amber: #f59e0b;
+      --green: #10b981;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Floating Navigation & Print Toolbar (Hidden in Print/PDF) */
+    .deck-toolbar {
+      position: fixed;
+      top: 16px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid var(--cyan);
+      padding: 8px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .toolbar-btn {
+      background: var(--cyan);
+      color: #020617;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .toolbar-btn.secondary {
+      background: #1e293b;
+      color: var(--text);
+      border: 1px solid #475569;
+    }
+
+    .slide-nav-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .slide-nav-dots a {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #1e293b;
+      color: var(--cyan);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .slide-nav-dots a:hover {
+      background: var(--cyan);
+      color: #020617;
+    }
+
+    @media print {
+      .deck-toolbar {
+        display: none !important;
+      }
+    }
+
+    /* Slide Container: Strictly 7 Slides */
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      padding: 4.2rem 5.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: radial-gradient(circle at 85% 18%, #132347 0%, #070b14 68%);
+      border-bottom: 2px solid var(--border);
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide:last-of-type {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .tag {
+      display: inline-block;
+      color: var(--amber);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: 3.3rem;
+      line-height: 1.12;
+      color: var(--text);
+      margin-bottom: 1rem;
+      max-width: 1180px;
+    }
+
+    h2 {
+      font-size: 2.35rem;
+      color: var(--cyan);
+      margin-bottom: 1.3rem;
+    }
+
+    p, li {
+      font-size: 1.28rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+    }
+
+    ul {
+      margin-left: 1.6rem;
+    }
+
+    li {
+      margin-bottom: 0.7rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    .box {
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid #334155;
+      border-left: 5px solid var(--cyan);
+      padding: 1.45rem 1.6rem;
+      border-radius: 12px;
+    }
+
+    .box.amber {
+      border-left-color: var(--amber);
+    }
+
+    .box.green {
+      border-left-color: var(--green);
+    }
+
+    .box h3 {
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 0.65rem;
+    }
+
+    .box p, .box li {
+      font-size: 1.08rem;
+      line-height: 1.48;
+    }
+
+    .pipeline-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1rem 0 1.4rem;
+    }
+
+    .flow-step {
+      background: #0b1528;
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      padding: 1.2rem;
+      position: relative;
+    }
+
+    .flow-step .step-num {
+      display: inline-block;
+      background: var(--cyan);
+      color: #020617;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-bottom: 0.5rem;
+    }
+
+    .flow-step h4 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .flow-step p {
+      font-size: 0.96rem;
+      color: #cbd5e1;
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.92rem;
+      color: #64748b;
+      border-top: 1px solid var(--border);
+      padding-top: 0.9rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+    }
+
+    .pill {
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Navigation & Print-to-PDF Bar (Hidden when printing) -->
+  <nav class="deck-toolbar" aria-label="Presentation Deck Controls">
+    <a href="index.html" class="toolbar-btn secondary">&larr; Back to Jukebox App</a>
+    <div class="slide-nav-dots" aria-label="Jump to slide">
+      <a href="#slide1">1</a>
+      <a href="#slide2">2</a>
+      <a href="#slide3">3</a>
+      <a href="#slide4">4</a>
+      <a href="#slide5">5</a>
+      <a href="#slide6">6</a>
+      <a href="#slide7">7</a>
+    </div>
+    <button type="button" class="toolbar-btn" onclick="window.print()">
+      Print / Save as 7-Slide PDF (Ctrl+P)
+    </button>
+  </nav>
+
+  <!-- SLIDE 1: TITLE -->
+  <section id="slide1" class="slide">
+    <div>
+      <div class="tag">2026 NASA Space Apps Challenge &bull; Legazpi City Local Event &amp; Global Judging</div>
+      <h1>AURA-EARTH: Spatial &amp; Temporal Sonification Jukebox for NASA EIC</h1>
+      <p style="font-size: 1.55rem; max-width: 980px; color: #38bdf8; margin-top: 0.8rem;">
+        Translating NASA Earth Information Center (EIC) visual datasets into real-time, 3D stereo harmonic soundscapes for blind, low-vision, and general audiences.
+      </p>
+      <div class="pill-row">
+        <span class="pill">Challenge: The Earth Information Jukebox</span>
+        <span class="pill">W3C Web Audio API &bull; 16-Band C-Lydian DSP</span>
+        <span class="pill">W3C Web Speech API &bull; Screen-Reader Native</span>
+        <span class="pill">Western Pacific &amp; Bicol Regional Focus</span>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="box">
+        <h3>Multi-Sensory Earth Science</h3>
+        <p>Converts equirectangular satellite frames into spatial audio so anyone can locate thermal anomalies, typhoons, and wildfires by ear.</p>
+      </div>
+      <div class="box amber">
+        <h3>Zero-Dependency Web Instrument</h3>
+        <p>100% browser-native HTML5 Canvas + Web Audio synthesizer + live <code>.webm</code> audio recorder with zero backend failure points.</p>
+      </div>
+      <div class="box green">
+        <h3>Built on Official NASA SVS Data</h3>
+        <p>Calibrated for NASA SVS IDs 5176 (SST), 4285 (GPM Precipitation), 5113 (VIIRS Fires), and 5425 (Perpetual Ocean Currents).</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH Project Deck &bull; Independent Participant Submission (Zero NASA Logos Used)</span>
+      <span>Slide 1 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: THE PROBLEM -->
+  <section id="slide2" class="slide">
+    <div>
+      <div class="tag">01 &bull; Problem Statement</div>
+      <h2>Earth Science is Visually Rich—But Acoustically Silent</h2>
+      <div class="grid-2">
+        <div class="box amber">
+          <h3>The Accessibility Gap (2.2B+ People)</h3>
+          <ul>
+            <li>Over 2.2 billion people globally live with vision impairment or blindness (WHO).</li>
+            <li>NASA’s Earth Information Center (EIC) produces extraordinary satellite visualizations of climate change, but relying purely on color-coded maps locks out blind and low-vision learners.</li>
+            <li>Static alt-text cannot convey continuous spatial gradients or multi-frame temporal evolution.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Cognitive &amp; Temporal Overload</h3>
+          <ul>
+            <li>Tracking simultaneous planetary shifts—such as sea surface warming in the Philippine Sea alongside tropical cyclone intensification—is difficult with sight alone.</li>
+            <li>The human auditory system excels at detecting subtle frequency shifts, stereo movement, and rhythmic deltas that the naked eye can miss across time-series frames.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH &bull; Problem Statement</span>
+      <span>Slide 2 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: OUR SOLUTION -->
+  <section id="slide3" class="slide">
+    <div>
+      <div class="tag">02 &bull; The Solution</div>
+      <h2>Meet AURA-EARTH: The Browser-Native Earth Jukebox</h2>
+      <p style="margin-bottom: 1.2rem;">
+        AURA-EARTH is a zero-dependency web application that scans NASA EIC visualizations from West to East (`180°W` to `180°E`), synthesizing real-time polyphonic soundscapes directly from pixel colorbars.
+      </p>
+      <div class="grid-3">
+        <div class="box">
+          <h3>1. Spatial Audio Radar</h3>
+          <p>As the vertical scanline sweeps across the globe, Longitude maps smoothly to 3D stereo panning (`-1.0` Left Ear to `+1.0` Right Ear), letting listeners pinpoint anomalies geographically.</p>
+        </div>
+        <div class="box amber">
+          <h3>2. Musical Data Harmonies</h3>
+          <p>Each vertical slice is divided into 16 latitude bands mapped to a 16-note <strong>C-Lydian scale (`C3` to `D5`)</strong>—eliminating harsh static noise in favor of meaningful harmonic chords.</p>
+        </div>
+        <div class="box green">
+          <h3>3. Multi-Frame Time-Series</h3>
+          <p>Users can upload sequential `.png`/`.jpg` frames from NASA SVS or run calibrated 4-frame sequences, hearing both spatial patterns and frame-to-frame temporal change ($\Delta$).</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH &bull; Solution Overview</span>
+      <span>Slide 3 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: NASA DATA & COMPUTER VISION PIPELINE -->
+  <section id="slide4" class="slide">
+    <div>
+      <div class="tag">03 &bull; NASA Data &amp; Computer Vision Architecture</div>
+      <h2>How Official NASA EIC &amp; SVS Datasets Drive the Engine</h2>
+      <div class="pipeline-flow">
+        <div class="flow-step">
+          <span class="step-num">STEP 1</span>
+          <h4>NASA SVS EIC Frames</h4>
+          <p>Loads single or sequential equirectangular frames from NASA SVS (IDs 5176, 4285, 5113, 5425) or built-in calibrated maps.</p>
+        </div>
+        <div class="flow-step">
+          <span class="step-num">STEP 2</span>
+          <h4>Canvas 2D Pixel Extraction</h4>
+          <p>Extracts `1 x 400` vertical RGB slices via `getImageData()` on an offscreen buffer at up to 60 fps.</p>
+        </div>
+        <div class="flow-step">
+          <span class="step-num">STEP 3</span>
+          <h4>16-Band Colorbar Decoder</h4>
+          <p>Applies dataset-specific scientific color transfer functions + frame-to-frame pixel Delta ($\Delta$) across 16 latitude bands.</p>
+        </div>
+        <div class="flow-step">
+          <span class="step-num">STEP 4</span>
+          <h4>Web Audio DSP &amp; Export</h4>
+          <p>Synthesizes 3 polyphonic voices + C2 drone through `BiquadFilterNode`, `StereoPannerNode`, `AnalyserNode`, &amp; `MediaRecorder`.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="box">
+          <h3>4 Calibrated NASA SVS Scientific Profiles</h3>
+          <ul>
+            <li><strong>SVS ID 5176 (SST Anomaly):</strong> Thermal red/orange marine heatwaves vs. cool blue baseline.</li>
+            <li><strong>SVS ID 4285 (GPM Precipitation):</strong> Cyan/green rainbands &amp; magenta/white cyclone cores.</li>
+          </ul>
+        </div>
+        <div class="box amber">
+          <h3>High-Contrast Hazard &amp; Current Profiles</h3>
+          <ul>
+            <li><strong>SVS ID 5113 (VIIRS Active Fires):</strong> High-luminance orange/amber wildfire spikes over continents.</li>
+            <li><strong>SVS ID 5425 (Perpetual Ocean 2):</strong> Kuroshio &amp; Gulf Stream high-velocity boundary currents.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH &bull; NASA SVS Data Pipeline</span>
+      <span>Slide 4 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: ACOUSTIC MAPPING & ACCESSIBILITY DESIGN -->
+  <section id="slide5" class="slide">
+    <div>
+      <div class="tag">04 &bull; Acoustic Mapping &amp; Blind / Low-Vision Accessibility</div>
+      <h2>Designed First for Screen Readers &amp; Keyboard Exploration</h2>
+      <div class="grid-2">
+        <div class="box">
+          <h3>Spatial &amp; Harmonic Parameter Matrix</h3>
+          <ul>
+            <li><strong>Longitude (180°W &rarr; 180°E):</strong> Continuous `StereoPannerNode` (`-1.00 L` to `+1.00 R`).</li>
+            <li><strong>Latitude (90°S &rarr; 90°N):</strong> 16-Note C-Lydian Scale (`C3` 130.8 Hz to `D5` 587.3 Hz).</li>
+            <li><strong>Anomaly Intensity (0–100%):</strong> Dynamic timbre (`Sine` &rarr; `Triangle` &rarr; `Sawtooth`) + Low-Pass Filter cutoff (`520 Hz` to `6000 Hz`).</li>
+            <li><strong>Planetary Baseline:</strong> Subtle `C2` (`65.41 Hz`) equilibrium reference drone.</li>
+          </ul>
+        </div>
+        <div class="box green">
+          <h3>4-Tier Audio Legend &amp; Spoken Telemetry</h3>
+          <ul>
+            <li><strong>Keys `1`–`4` Reference Tones:</strong> Lets blind users audition `[1] Baseline (C3 Sine)`, `[2] Moderate (G3 Sine)`, `[3] Elevated (E4 Triangle)`, and `[4] Extreme (B4 Sawtooth)` before playback.</li>
+            <li><strong>Key `N` Web Speech Narration:</strong> Speaks instant natural-language telemetry (active dataset, longitude, stereo pan, anomaly %, and musical note).</li>
+            <li><strong>Arrow Key Scrubbing:</strong> `Left`/`Right` arrows step through longitudes manually with instant acoustic feedback.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH &bull; Accessibility Architecture</span>
+      <span>Slide 5 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: WORKING PROTOTYPE & WESTERN PACIFIC / BICOL RELEVANCE -->
+  <section id="slide6" class="slide">
+    <div>
+      <div class="tag">05 &bull; Prototype Demonstration &amp; Local Impact (Legazpi City / Bicol)</div>
+      <h2>From Global Sweep to the Philippine Sea &amp; Bicol Region</h2>
+      <div class="grid-2">
+        <div class="box amber">
+          <h3>Western Pacific &amp; Bicol Focus (`120°E–140°E, 5°N–20°N`)</h3>
+          <ul>
+            <li>Pressing <kbd>Key W</kbd> narrows the jukebox sweep to the <strong>Western Pacific / Philippine Sea &amp; Bicol sector</strong> and expands stereo panning across the regional window.</li>
+            <li>Allows students, educators, and disaster-resilience communicators in <strong>Legazpi City and Albay</strong> to hear marine heatwaves feeding typhoons and Kuroshio Current flows east of Luzon.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Strict Prototype Transparency &amp; Live Features</h3>
+          <ul>
+            <li><strong>Honest Data Mode Badge:</strong> Clearly distinguishes between `Mode: Built-in Calibrated EIC Map` and `Mode: Real NASA SVS EIC Frames (N loaded)`.</li>
+            <li><strong>Real-Time Spectrum Visualizer:</strong> Dual-mode frequency bar + oscilloscope canvas driven by Web Audio `AnalyserNode`.</li>
+            <li><strong>In-Browser `.webm` Audio Export:</strong> Records live sonifications via `MediaRecorder` for classrooms and podcasts.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>AURA-EARTH &bull; Prototype &amp; Local Relevance</span>
+      <span>Slide 6 / 7</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: IMPACT, CITATIONS & AI DISCLOSURE -->
+  <section id="slide7" class="slide">
+    <div>
+      <div class="tag">06 &bull; Impact, References &amp; Compliance</div>
+      <h2>Open Science, Full NASA Citations &amp; AI Disclosure</h2>
+      <div class="grid-2">
+        <div class="box">
+          <h3>Official NASA Data &amp; Open Standards Cited</h3>
+          <ul>
+            <li><strong>NASA EIC Gallery:</strong> <code>svs.gsfc.nasa.gov/gallery/earth-information-center/</code></li>
+            <li><strong>SVS 5176:</strong> Sea Surface Temperature (SST) Anomaly — Near Real Time</li>
+            <li><strong>SVS 4285:</strong> Global Precipitation from the GPM Constellation</li>
+            <li><strong>SVS 5113:</strong> Active Fires As Observed by VIIRS</li>
+            <li><strong>SVS 5425:</strong> Perpetual Ocean 2: Western Boundary Currents</li>
+            <li><strong>Web Standards:</strong> W3C Web Audio API, W3C Web Speech API, HTML5 Canvas 2D</li>
+          </ul>
+        </div>
+        <div class="box green">
+          <h3>Impact &amp; Super Intelligence (SI) Disclosure</h3>
+          <ul>
+            <li><strong>Educational &amp; Accessibility Impact:</strong> Ready for immediate deployment in visually impaired classrooms, science museums, and regional climate briefings with zero installation.</li>
+            <li><strong>SI / AI Disclosure:</strong> Generative AI (Google Gemini / Antigravity) was used during the hackathon window for code scaffolding, DSP mapping ideation, and documentation editing. All visual data frames derive from NASA SVS / calibrated procedural canvas, and all audio is synthesized mathematically in real time via Web Audio API oscillators.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Thank You! &bull; AURA-EARTH: Turning NASA Earth Science Sight into Sound</span>
+      <span>Slide 7 / 7</span>
+    </div>
+  </section>
+
+</body>
+</html>
